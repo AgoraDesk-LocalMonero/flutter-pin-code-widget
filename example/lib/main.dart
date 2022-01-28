@@ -32,12 +32,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pin code'),
-        actions: [TextButton(
-            onPressed: () {},
-            child: const Text(
-              'Skip',
-              style: TextStyle(color: Colors.blueAccent),
-            ))],
+        actions: [
+          TextButton(
+              onPressed: () {},
+              child: const Text(
+                'Skip',
+                style: TextStyle(color: Colors.blueAccent),
+              ))
+        ],
       ),
       body: SafeArea(
         child: Column(
