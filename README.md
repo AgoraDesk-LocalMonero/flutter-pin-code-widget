@@ -31,4 +31,4 @@ Full example is here https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-w
 
 ## Showcase
 
-![Showcase|width=400px](example/lib/show-case.png)
+![Showcase|width=400px](https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-widget/blob/main/example/lib/show-case.png)
