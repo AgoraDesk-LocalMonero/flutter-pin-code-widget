@@ -9,14 +9,14 @@ class PinCodeWidget extends StatefulWidget {
     required this.onChangedPin,
     this.onChangedPinLength,
     this.leftBottomWidget = const SizedBox(),
-    this.numbersStyle = const TextStyle(
-        fontSize: 30.0, fontWeight: FontWeight.w600, color: Colors.grey),
+    this.numbersStyle = const TextStyle(fontSize: 30.0, fontWeight: FontWeight.w600, color: Colors.grey),
     this.borderSide = const BorderSide(width: 1, color: Colors.grey),
     this.buttonColor = Colors.black12,
     this.emptyIndicatorColor = Colors.white,
     this.filledIndicatorColor = Colors.blueAccent,
     this.deleteIconColor = Colors.white,
     this.onPressColorAnimation = Colors.yellow,
+    this.clearOnFilled = true,
   }) : super(key: key);
 
   /// Callback after all pins input
@@ -54,6 +54,9 @@ class PinCodeWidget extends StatefulWidget {
 
   /// color appears when press pin button
   final Color onPressColorAnimation;
+
+  /// clear indicators when all digits are filled
+  final bool clearOnFilled;
 
   @override
   State<StatefulWidget> createState() => PinCodeState();
@@ -100,8 +103,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
   void setDefaultPinLength() => changePinLength(widget.initialPinLength);
 
   void calculateAspectRatio() {
-    final renderBox =
-        _gridViewKey.currentContext!.findRenderObject() as RenderBox;
+    final renderBox = _gridViewKey.currentContext!.findRenderObject() as RenderBox;
     final cellWidth = renderBox.size.width / 3;
     final cellHeight = renderBox.size.height / 4;
 
@@ -119,8 +121,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      Scaffold(key: _key, body: body(context), resizeToAvoidBottomInset: false);
+  Widget build(BuildContext context) => Scaffold(key: _key, body: body(context), resizeToAvoidBottomInset: false);
 
   Widget body(BuildContext context) {
     final deleteIconImage = Icon(
@@ -144,9 +145,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                   height: size,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isFilled
-                        ? widget.filledIndicatorColor
-                        : widget.emptyIndicatorColor,
+                    color: isFilled ? widget.filledIndicatorColor : widget.emptyIndicatorColor,
                   ));
             }),
           ),
@@ -172,8 +171,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                             index = 0;
                           } else if (index == 11) {
                             return Container(
-                              margin: const EdgeInsets.only(
-                                  left: marginLeft, right: marginRight),
+                              margin: const EdgeInsets.only(left: marginLeft, right: marginRight),
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   primary: widget.buttonColor,
@@ -181,7 +179,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                                   onPrimary: widget.onPressColorAnimation,
                                   shape: const CircleBorder(),
                                 ),
-                                onPressed: () => _pop(),
+                                onPressed: () => _onRemove(),
                                 child: deleteIconImage,
                               ),
                             );
@@ -190,8 +188,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                           }
 
                           return Container(
-                            margin: const EdgeInsets.only(
-                                left: marginLeft, right: marginRight),
+                            margin: const EdgeInsets.only(left: marginLeft, right: marginRight),
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                 primary: widget.buttonColor,
@@ -199,7 +196,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                                 side: widget.borderSide,
                                 shape: const CircleBorder(),
                               ),
-                              onPressed: () => _push(index),
+                              onPressed: () => _onPressed(index),
                               child: Text(
                                 '$index',
                                 style: widget.numbersStyle,
@@ -213,7 +210,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
     );
   }
 
-  void _push(int num) {
+  void _onPressed(int num) async {
     setState(() {
       if (currentPinLength() >= pinLength) {
         return;
@@ -227,9 +224,13 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
         widget.onFullPin(pin, this);
       }
     });
+    if (widget.clearOnFilled && pin.length == pinLength) {
+      await Future.delayed(const Duration(milliseconds: 300));
+      clear();
+    }
   }
 
-  void _pop() {
+  void _onRemove() {
     if (currentPinLength() == 0) {
       return;
     }
