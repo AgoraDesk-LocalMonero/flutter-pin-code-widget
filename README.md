@@ -1,5 +1,7 @@
 - A Flutter package that helps create a PIN Code screens.
 
+Note, that the widget has `leftBottomWidget` property, for adding one more button on the bottom left.
+
 ## Usage
 
 ```dart

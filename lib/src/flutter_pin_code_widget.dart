@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class PinCodeWidget extends StatefulWidget {
   const PinCodeWidget({
@@ -106,7 +107,6 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
     final renderBox = _gridViewKey.currentContext!.findRenderObject() as RenderBox;
     final cellWidth = renderBox.size.width / 3;
     final cellHeight = renderBox.size.height / 4;
-
     if (cellWidth > 0 && cellHeight > 0) {
       _aspectRatio = cellWidth / cellHeight;
     }
@@ -129,84 +129,94 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
       color: widget.deleteIconColor,
     );
 
-    return Container(
-      padding: const EdgeInsets.only(left: 40.0, right: 40.0, bottom: 40.0),
-      child: Column(children: <Widget>[
-        SizedBox(
-          width: 180,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(pinLength, (index) {
-              const size = 10.0;
-              final isFilled = pin.length > index ? true : false;
+    return MeasureSize(
+      onChange: (size) {
+        calculateAspectRatio();
+      },
+      child: Container(
+        color: Colors.green,
+        key: _gridViewKey,
+        padding: const EdgeInsets.only(left: 40.0, right: 40.0, bottom: 40.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            SizedBox(
+              width: 180,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(pinLength, (index) {
+                  const size = 10.0;
+                  final isFilled = pin.length > index ? true : false;
 
-              return Container(
-                  width: size,
-                  height: size,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isFilled ? widget.filledIndicatorColor : widget.emptyIndicatorColor,
-                  ));
-            }),
-          ),
-        ),
-        const Spacer(flex: 2),
-        Flexible(
-            flex: 24,
-            child: Container(
-                key: _gridViewKey,
-                child: _aspectRatio > 0
-                    ? GridView.count(
-                        shrinkWrap: true,
-                        crossAxisCount: 3,
-                        childAspectRatio: _aspectRatio,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: List.generate(12, (index) {
-                          const double marginRight = 15;
-                          const double marginLeft = 15;
+                  return Container(
+                      width: size,
+                      height: size,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: isFilled ? widget.filledIndicatorColor : widget.emptyIndicatorColor,
+                      ));
+                }),
+              ),
+            ),
+            const Spacer(flex: 2),
+            Flexible(
+              flex: 24,
+              child: Container(
+                  child: _aspectRatio > 0
+                      ? GridView.count(
+                          shrinkWrap: true,
+                          crossAxisCount: 3,
+                          childAspectRatio: _aspectRatio,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: List.generate(12, (index) {
+                            const double marginRight = 15;
+                            const double marginLeft = 15;
 
-                          if (index == 9) {
-                            return widget.leftBottomWidget;
-                          } else if (index == 10) {
-                            index = 0;
-                          } else if (index == 11) {
+                            if (index == 9) {
+                              return widget.leftBottomWidget;
+                            } else if (index == 10) {
+                              index = 0;
+                            } else if (index == 11) {
+                              return Container(
+                                margin: const EdgeInsets.only(left: marginLeft, right: marginRight),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: widget.buttonColor,
+                                    side: widget.borderSide,
+                                    onPrimary: widget.onPressColorAnimation,
+                                    shape: const CircleBorder(),
+                                  ),
+                                  onPressed: () => _onRemove(),
+                                  child: deleteIconImage,
+                                ),
+                              );
+                            } else {
+                              index++;
+                            }
+
                             return Container(
                               margin: const EdgeInsets.only(left: marginLeft, right: marginRight),
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   primary: widget.buttonColor,
-                                  side: widget.borderSide,
                                   onPrimary: widget.onPressColorAnimation,
+                                  side: widget.borderSide,
                                   shape: const CircleBorder(),
                                 ),
-                                onPressed: () => _onRemove(),
-                                child: deleteIconImage,
+                                onPressed: () => _onPressed(index),
+                                child: Text(
+                                  '$index',
+                                  style: widget.numbersStyle,
+                                ),
                               ),
                             );
-                          } else {
-                            index++;
-                          }
-
-                          return Container(
-                            margin: const EdgeInsets.only(left: marginLeft, right: marginRight),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: widget.buttonColor,
-                                onPrimary: widget.onPressColorAnimation,
-                                side: widget.borderSide,
-                                shape: const CircleBorder(),
-                              ),
-                              onPressed: () => _onPressed(index),
-                              child: Text(
-                                '$index',
-                                style: widget.numbersStyle,
-                              ),
-                            ),
-                          );
-                        }),
-                      )
-                    : null))
-      ]),
+                          }),
+                        )
+                      : null),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -240,5 +250,44 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
   void _afterLayout(dynamic _) {
     setDefaultPinLength();
     calculateAspectRatio();
+  }
+}
+
+// Credits for the code below for https://stackoverflow.com/a/60868972/7198006
+typedef OnWidgetSizeChange = void Function(Size size);
+
+class _MeasureSizeRenderObject extends RenderProxyBox {
+  Size? oldSize;
+  final OnWidgetSizeChange onChange;
+
+  _MeasureSizeRenderObject(this.onChange);
+
+  @override
+  void performLayout() {
+    super.performLayout();
+
+    Size newSize = child!.size;
+    if (oldSize == newSize) return;
+
+    oldSize = newSize;
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      onChange(newSize);
+    });
+  }
+}
+
+class MeasureSize extends SingleChildRenderObjectWidget {
+  const MeasureSize({
+    Key? key,
+    required this.onChange,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  /// Function to be called when layout changes
+  final OnWidgetSizeChange onChange;
+
+  @override
+  RenderObject createRenderObject(BuildContext context) {
+    return _MeasureSizeRenderObject(onChange);
   }
 }
