@@ -1,4 +1,4 @@
-## 0.0.3
+## 0.0.3+1
 
 * Added additional available size calculation, due to the bug appeared in case calling widget via AutoRoute.
 

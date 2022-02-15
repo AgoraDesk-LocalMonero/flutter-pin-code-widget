@@ -137,7 +137,6 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
         calculateAspectRatio();
       },
       child: Container(
-        color: Colors.green,
         key: _gridViewKey,
         padding: const EdgeInsets.only(left: 40.0, right: 40.0, bottom: 40.0),
         child: Column(
