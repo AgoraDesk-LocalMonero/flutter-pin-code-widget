@@ -1,3 +1,11 @@
+## 0.0.4+1
+
+* Fixed error `setState() called after dispose()`.
+
+## 0.0.4
+
+* Added 'deleteButtonColor' property.
+
 ## 0.0.3+1
 
 * Added additional available size calculation, due to the bug appeared in case calling widget via AutoRoute.

@@ -14,6 +14,7 @@ class PinCodeWidget extends StatefulWidget {
         fontSize: 30.0, fontWeight: FontWeight.w600, color: Colors.grey),
     this.borderSide = const BorderSide(width: 1, color: Colors.grey),
     this.buttonColor = Colors.black12,
+    this.deleteButtonColor = Colors.black12,
     this.emptyIndicatorColor = Colors.white,
     this.filledIndicatorColor = Colors.blueAccent,
     this.deleteIconColor = Colors.white,
@@ -54,6 +55,9 @@ class PinCodeWidget extends StatefulWidget {
   /// delete icon color
   final Color deleteIconColor;
 
+  /// delete icon color
+  final Color deleteButtonColor;
+
   /// color appears when press pin button
   final Color onPressColorAnimation;
 
@@ -83,10 +87,14 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
     pinLength = widget.initialPinLength;
     pin = '';
     _aspectRatio = 0;
-    WidgetsBinding.instance!.addPostFrameCallback(_afterLayout);
+    WidgetsBinding.instance?.addPostFrameCallback(_afterLayout);
   }
 
-  void clear() => setState(() => pin = '');
+  void clear() {
+    if (_key.currentState?.mounted != null && _key.currentState!.mounted) {
+      setState(() => pin = '');
+    }
+  }
 
   void reset() => setState(() {
         pin = '';
@@ -186,7 +194,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                                     left: marginLeft, right: marginRight),
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    primary: widget.buttonColor,
+                                    primary: widget.deleteButtonColor,
                                     side: widget.borderSide,
                                     onPrimary: widget.onPressColorAnimation,
                                     shape: const CircleBorder(),
@@ -276,7 +284,7 @@ class _MeasureSizeRenderObject extends RenderProxyBox {
     if (oldSize == newSize) return;
 
     oldSize = newSize;
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
       onChange(newSize);
     });
   }
