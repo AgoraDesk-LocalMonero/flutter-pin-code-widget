@@ -1,3 +1,7 @@
+## 0.0.4+2
+
+* Updated `WidgetsBinding.instance` nullability.
+
 ## 0.0.4+1
 
 * Fixed error `setState() called after dispose()`.

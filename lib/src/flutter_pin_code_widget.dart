@@ -87,7 +87,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
     pinLength = widget.initialPinLength;
     pin = '';
     _aspectRatio = 0;
-    WidgetsBinding.instance?.addPostFrameCallback(_afterLayout);
+    WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
   }
 
   void clear() {
@@ -284,7 +284,7 @@ class _MeasureSizeRenderObject extends RenderProxyBox {
     if (oldSize == newSize) return;
 
     oldSize = newSize;
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       onChange(newSize);
     });
   }
