@@ -34,3 +34,8 @@ Full example is here https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-w
 ## Showcase
 
 ![Showcase|width=400px](https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-widget/blob/main/example/lib/show-case.png)
+
+## Credits
+
+InstaImageViewer is a project by [Agoradesk](https://agoradesk.com/), P2P cryptocurrency trading platform.
+Created by the team behind LocalMonero, the biggest and most trusted Monero P2P trading platform.
