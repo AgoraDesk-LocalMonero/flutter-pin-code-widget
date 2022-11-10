@@ -1,3 +1,7 @@
+## 0.0.5
+
+* Added `deleteButtonLabel` property for the accessibility.
+
 ## 0.0.4+2
 
 * Updated `WidgetsBinding.instance` nullability.

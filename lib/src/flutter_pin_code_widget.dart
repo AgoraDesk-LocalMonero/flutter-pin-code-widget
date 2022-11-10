@@ -17,6 +17,7 @@ class PinCodeWidget extends StatefulWidget {
     this.deleteButtonColor = Colors.black12,
     this.emptyIndicatorColor = Colors.white,
     this.filledIndicatorColor = Colors.blueAccent,
+    this.deleteButtonLabel = 'Delete',
     this.deleteIconColor = Colors.white,
     this.onPressColorAnimation = Colors.yellow,
     this.clearOnFilled = true,
@@ -51,6 +52,9 @@ class PinCodeWidget extends StatefulWidget {
 
   /// filled pins color
   final Color filledIndicatorColor;
+
+  /// delete icon label (accessibility)
+  final String deleteButtonLabel;
 
   /// delete icon color
   final Color deleteIconColor;
@@ -192,15 +196,18 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                               return Container(
                                 margin: const EdgeInsets.only(
                                     left: marginLeft, right: marginRight),
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: widget.deleteButtonColor,
-                                    side: widget.borderSide,
-                                    onPrimary: widget.onPressColorAnimation,
-                                    shape: const CircleBorder(),
+                                child: Semantics(
+                                  label: widget.deleteButtonLabel,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: widget.deleteButtonColor,
+                                      side: widget.borderSide,
+                                      onPrimary: widget.onPressColorAnimation,
+                                      shape: const CircleBorder(),
+                                    ),
+                                    onPressed: () => _onRemove(),
+                                    child: deleteIconImage,
                                   ),
-                                  onPressed: () => _onRemove(),
-                                  child: deleteIconImage,
                                 ),
                               );
                             } else {
