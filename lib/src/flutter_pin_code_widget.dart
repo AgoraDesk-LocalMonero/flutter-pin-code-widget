@@ -196,17 +196,19 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                               return Container(
                                 margin: const EdgeInsets.only(
                                     left: marginLeft, right: marginRight),
-                                child: Semantics(
-                                  label: widget.deleteButtonLabel,
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: widget.deleteButtonColor,
-                                      side: widget.borderSide,
-                                      onPrimary: widget.onPressColorAnimation,
-                                      shape: const CircleBorder(),
+                                child: MergeSemantics(
+                                  child: Semantics(
+                                    label: widget.deleteButtonLabel,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: widget.deleteButtonColor,
+                                        side: widget.borderSide,
+                                        onPrimary: widget.onPressColorAnimation,
+                                        shape: const CircleBorder(),
+                                      ),
+                                      onPressed: () => _onRemove(),
+                                      child: deleteIconImage,
                                     ),
-                                    onPressed: () => _onRemove(),
-                                    child: deleteIconImage,
                                   ),
                                 ),
                               );

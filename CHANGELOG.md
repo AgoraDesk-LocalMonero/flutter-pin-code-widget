@@ -1,3 +1,7 @@
+## 0.0.5+1
+
+* Fix naming `deleteButtonLabel` property for the accessibility.
+
 ## 0.0.5
 
 * Added `deleteButtonLabel` property for the accessibility.
