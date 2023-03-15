@@ -1,39 +1,40 @@
 - A Flutter package that helps create a PIN Code screens.
+- Inspired by Android PIN code screen/
+- Widget can use PIN with any length (video below)
 
-Note, that the widget has `leftBottomWidget` property, for adding one more button on the bottom left.
+Note, that the widget has `centerBottomWidget` property, for adding one more button on the bottom left.
 
 ## Usage
 
 ```dart
-      SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 40),
-            Text(
-              'Set up PIN',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            const SizedBox(height: 20),
-            const Text('You can use this PIN to unlock the app.'),
-            const SizedBox(height: 60),
-            Expanded(
-              child: PinCodeWidget(
-                onFullPin: (_, __) {},
-                initialPinLength: 4,
-                onChangedPin: (_) {},
-              ),
-            ),
-          ],
-        ),
+  PinCodeWidget(
+    minPinLength: 4,
+    maxPinLength: 25,
+    onChangedPin: (pin) {
+      // check the PIN length and check different PINs with 4,5.. length.
+    },
+    onEnter: (pin, _) {
+      // callback user pressed enter
+    },
+    centerBottomWidget: IconButton(
+      icon: const Icon(
+        Icons.fingerprint,
+        size: 40,
       ),
+      onPressed: () {},
+    ),
+  ),
 ```
 
-Full example is here https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-widget/blob/main/example/lib/main.dart
+1. Full example is here https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-widget/blob/main/example/lib/main.dart
+2. How it uses in the real app https://github.com/AgoraDesk-LocalMonero/agoradesk-app-foss/blob/main/lib/features/auth/screens/pin_code_set_screen.dart
 
 ## Showcase
 
 ![Showcase|width=400px](https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-widget/blob/main/example/lib/show-case.png)
+
+App from the stores https://agoradesk.com/
+![Showcase|width=400px](https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-widget/blob/main/example/lib/show-case.gif)
 
 ## Credits
 

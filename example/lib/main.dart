@@ -31,7 +31,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pin code'),
         actions: [
           TextButton(
               onPressed: () {},
@@ -51,13 +50,26 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headline4,
             ),
             const SizedBox(height: 20),
-            const Text('You can use this PIN to unlock the app.'),
+            const Text('You can use this PIN to unlock the app..'),
+            const Text('Pin length is 4-25 digits'),
             const SizedBox(height: 60),
             Expanded(
               child: PinCodeWidget(
-                onFullPin: (_, __) {},
-                initialPinLength: 4,
-                onChangedPin: (_) {},
+                minPinLength: 4,
+                maxPinLength: 25,
+                onChangedPin: (pin) {
+                  // check the PIN length and check different PINs with 4,5.. length.
+                },
+                onEnter: (pin, _) {
+                  // callback user pressed enter
+                },
+                centerBottomWidget: IconButton(
+                  icon: const Icon(
+                    Icons.fingerprint,
+                    size: 40,
+                  ),
+                  onPressed: () {},
+                ),
               ),
             ),
           ],
