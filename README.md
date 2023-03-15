@@ -31,9 +31,12 @@ Note, that the widget has `centerBottomWidget` property, for adding one more but
 
 ## Showcase
 
+Example app
+
 ![Showcase|width=400px](https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-widget/blob/main/example/lib/show-case.jpg)
 
-App from the stores https://agoradesk.com/
+App from the stores https://agoradesk.com/, the code is here code https://github.com/AgoraDesk-LocalMonero/agoradesk-app-foss/blob/main/lib/features/auth/screens/pin_code_set_screen.dart
+
 ![Showcase|width=400px](https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-widget/blob/main/example/lib/show-case.gif)
 
 ## Credits
