@@ -27,11 +27,11 @@ Note, that the widget has `centerBottomWidget` property, for adding one more but
 ```
 
 1. Full example is here https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-widget/blob/main/example/lib/main.dart
-2. How it uses in the real app https://github.com/AgoraDesk-LocalMonero/agoradesk-app-foss/blob/main/lib/features/auth/screens/pin_code_set_screen.dart
+2. How this package used in the real app https://github.com/AgoraDesk-LocalMonero/agoradesk-app-foss/blob/main/lib/features/auth/screens/pin_code_set_screen.dart
 
 ## Showcase
 
-![Showcase|width=400px](https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-widget/blob/main/example/lib/show-case.png)
+![Showcase|width=400px](https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-widget/blob/main/example/lib/show-case.jpg)
 
 App from the stores https://agoradesk.com/
 ![Showcase|width=400px](https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-widget/blob/main/example/lib/show-case.gif)
