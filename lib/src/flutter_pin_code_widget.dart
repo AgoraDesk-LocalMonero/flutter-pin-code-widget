@@ -24,6 +24,7 @@ class PinCodeWidget extends StatefulWidget {
     this.deleteIconColor = Colors.white,
     this.onPressColorAnimation = Colors.yellow,
     this.buttonStyle,
+    this.backgroundColor,
   }) : super(key: key);
 
   /// Callback after all pins input
@@ -75,6 +76,8 @@ class PinCodeWidget extends StatefulWidget {
   final Color onPressColorAnimation;
 
   final ButtonStyle? buttonStyle;
+
+  final Color? backgroundColor;
 
   @override
   State<StatefulWidget> createState() => PinCodeState();
@@ -158,6 +161,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
       },
       child: Container(
         key: _gridViewKey,
+        color: widget.backgroundColor,
         padding: const EdgeInsets.only(left: 40, right: 40, bottom: 30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
