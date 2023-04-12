@@ -23,6 +23,7 @@ class PinCodeWidget extends StatefulWidget {
     this.enterButtonLabel = 'Enter',
     this.deleteIconColor = Colors.white,
     this.onPressColorAnimation = Colors.yellow,
+    this.buttonStyle,
   }) : super(key: key);
 
   /// Callback after all pins input
@@ -72,6 +73,8 @@ class PinCodeWidget extends StatefulWidget {
 
   /// color appears when press pin button
   final Color onPressColorAnimation;
+
+  final ButtonStyle? buttonStyle;
 
   @override
   State<StatefulWidget> createState() => PinCodeState();
@@ -227,13 +230,15 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                                     child: Semantics(
                                       label: widget.deleteButtonLabel,
                                       child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          primary: widget.deleteButtonColor,
-                                          side: widget.borderSide,
-                                          onPrimary:
-                                              widget.onPressColorAnimation,
-                                          shape: const CircleBorder(),
-                                        ),
+                                        style: widget.buttonStyle ??
+                                            ElevatedButton.styleFrom(
+                                              foregroundColor:
+                                                  widget.onPressColorAnimation,
+                                              backgroundColor:
+                                                  widget.deleteButtonColor,
+                                              side: widget.borderSide,
+                                              shape: const CircleBorder(),
+                                            ),
                                         onPressed: () => _onRemove(),
                                         child: deleteIconImage,
                                       ),
@@ -250,13 +255,15 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                                     child: Semantics(
                                       label: widget.enterButtonLabel,
                                       child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          primary: widget.deleteButtonColor,
-                                          side: widget.borderSide,
-                                          onPrimary:
-                                              widget.onPressColorAnimation,
-                                          shape: const CircleBorder(),
-                                        ),
+                                        style: widget.buttonStyle ??
+                                            ElevatedButton.styleFrom(
+                                              foregroundColor:
+                                                  widget.onPressColorAnimation,
+                                              backgroundColor:
+                                                  widget.deleteButtonColor,
+                                              side: widget.borderSide,
+                                              shape: const CircleBorder(),
+                                            ),
                                         onPressed: () {
                                           widget.onEnter(pin, this);
                                           clear();
@@ -275,12 +282,14 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                                     right: marginRight,
                                     bottom: marginBottom),
                                 child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: widget.buttonColor,
-                                    onPrimary: widget.onPressColorAnimation,
-                                    side: widget.borderSide,
-                                    shape: const CircleBorder(),
-                                  ),
+                                  style: widget.buttonStyle ??
+                                      ElevatedButton.styleFrom(
+                                        foregroundColor:
+                                            widget.onPressColorAnimation,
+                                        backgroundColor: widget.buttonColor,
+                                        side: widget.borderSide,
+                                        shape: const CircleBorder(),
+                                      ),
                                   onPressed: () => _onPressed(index),
                                   child: Text(
                                     '$index',
