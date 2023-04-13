@@ -96,7 +96,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
   bool animate = false;
 
   int currentPinLength() => pin.length;
-  var isPinVisible = true;
+  var isPinVisible = false;
   @override
   void initState() {
     super.initState();
@@ -165,7 +165,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
       child: Container(
         key: _gridViewKey,
         color: widget.backgroundColor,
-        padding: const EdgeInsets.only(left: 45, right: 45, bottom: 0),
+        padding: const EdgeInsets.only(left: 70, right: 70, bottom: 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
@@ -250,7 +250,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
             ),
             const Spacer(flex: 1),
             Flexible(
-              flex: 100,
+              flex: 75,
               child: Container(
                   child: _aspectRatio > 0
                       ? GridView.count(
@@ -352,7 +352,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
             ),
             widget.centerBottomWidget != null
                 ? Flexible(
-                    flex: 2,
+                    flex: 25,
                     child: Center(child: widget.centerBottomWidget!),
                   )
                 : const SizedBox(),
