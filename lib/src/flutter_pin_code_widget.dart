@@ -150,9 +150,9 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
       );
 
   Widget body(BuildContext context) {
-    final deleteIconImage = Icon(
+    const deleteIconImage = Icon(
       Icons.backspace_rounded,
-      color: widget.deleteIconColor,
+      color: Colors.red,
     );
     final enterIconImage = Icon(
       CupertinoIcons.arrow_right_to_line,
@@ -282,8 +282,9 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                           label: widget.deleteButtonLabel,
                           child: ElevatedButton(
                             style: widget.buttonStyle?.copyWith(
-                                  backgroundColor:
-                                      MaterialStatePropertyAll(Colors.red),
+                                  foregroundColor:
+                                      const MaterialStatePropertyAll(
+                                          Colors.red),
                                 ) ??
                                 ElevatedButton.styleFrom(
                                   foregroundColor: widget.onPressColorAnimation,
@@ -312,7 +313,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                           child: ElevatedButton(
                             style: widget.buttonStyle?.copyWith(
                                   backgroundColor: MaterialStatePropertyAll(
-                                    Theme.of(context).colorScheme.primary,
+                                    Theme.of(context).colorScheme.surface,
                                   ),
                                 ) ??
                                 ElevatedButton.styleFrom(
