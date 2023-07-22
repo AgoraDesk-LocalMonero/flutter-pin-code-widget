@@ -23,6 +23,9 @@ class PinCodeWidget extends StatefulWidget {
     this.enterButtonLabel = 'Enter',
     this.deleteIconColor = Colors.white,
     this.onPressColorAnimation = Colors.yellow,
+    this.buttonStyle,
+    this.backgroundColor,
+    this.buttonMargin,
   }) : super(key: key);
 
   /// Callback after all pins input
@@ -73,6 +76,12 @@ class PinCodeWidget extends StatefulWidget {
   /// color appears when press pin button
   final Color onPressColorAnimation;
 
+  final ButtonStyle? buttonStyle;
+
+  final Color? backgroundColor;
+
+  final EdgeInsetsGeometry? buttonMargin;
+
   @override
   State<StatefulWidget> createState() => PinCodeState();
 }
@@ -87,7 +96,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
   bool animate = false;
 
   int currentPinLength() => pin.length;
-
+  var isPinVisible = false;
   @override
   void initState() {
     super.initState();
@@ -141,168 +150,227 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
       );
 
   Widget body(BuildContext context) {
-    final deleteIconImage = Icon(
-      CupertinoIcons.delete_left,
-      color: widget.deleteIconColor,
+    const deleteIconImage = Icon(
+      Icons.backspace_rounded,
+      color: Colors.red,
     );
     final enterIconImage = Icon(
       CupertinoIcons.arrow_right_to_line,
       color: widget.deleteIconColor,
     );
-    return MeasureSize(
-      onChange: (size) {
-        calculateAspectRatio();
-      },
-      child: Container(
+    return LayoutBuilder(builder: (context, constraints) {
+      final mh = constraints.maxHeight.clamp(480, 768).toDouble();
+      final mw = constraints.maxWidth.clamp(240, 600).toDouble();
+      // final realH = MediaQuery.of(context).size.height;
+      final hr = (mh / 234).clamp(0.5, 1).toDouble();
+      // final hh = mw * hr;
+      // final topH = ((realH - 500 * hr) * 0.5).clamp(0, realH).toDouble();
+
+      final wr = (mw / 468).clamp(0.5, 1).toDouble();
+      // final ww = mw * wr;
+      // final cardW = 600 * wr;
+      return Container(
+        width: mw,
+        height: mh,
         key: _gridViewKey,
-        padding: const EdgeInsets.only(left: 40, right: 40, bottom: 30),
+        color: widget.backgroundColor,
+        // padding: const EdgeInsets.only(left: 70, right: 70, bottom: 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            SizedBox(
-              height: 20,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
-                child: ListView(
-                  controller: listController,
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  shrinkWrap: true,
-                  // physics: const NeverScrollableScrollPhysics(),
-                  children: List.generate(pin.length, (index) {
-                    const size = 10.0;
-                    if (index == pin.length - 1) {
-                      return Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                        child: AnimatedContainer(
-                          width: animate ? size : size + 10,
-                          height: !animate ? size : size + 10,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: widget.filledIndicatorColor,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 48 * wr,
+                ),
+                Visibility(
+                  visible: pin.isNotEmpty && !isPinVisible,
+                  replacement: Builder(builder: (context) {
+                    return (pin.isNotEmpty)
+                        ? Text(
+                            pin,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(
+                                  fontSize: 25,
+                                ),
+                          )
+                        : const Icon(
+                            Icons.more_horiz,
+                            size: 35,
+                          );
+                  }),
+                  child: SizedBox(
+                    height: 35 * hr,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                      child: ListView(
+                        controller: listController,
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                        shrinkWrap: true,
+                        // physics: const NeverScrollableScrollPhysics(),
+                        children: List.generate(pin.length, (index) {
+                          const size = 10.0;
+                          if (index == pin.length - 1) {
+                            return AnimatedContainer(
+                              width: (animate ? size : size + 10),
+                              height: (!animate ? size : size + 10),
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: widget.filledIndicatorColor,
+                              ),
+                            );
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                            child: Container(
+                              width: size,
+                              height: size,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: widget.filledIndicatorColor,
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    setState(
+                      () {
+                        isPinVisible = !isPinVisible;
+                      },
+                    );
+                  },
+                  icon: Icon(
+                    isPinVisible ? Icons.visibility_off : Icons.visibility,
+                  ),
+                )
+              ],
+            ),
+            const Spacer(flex: 1),
+            GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 3,
+              childAspectRatio: (8 / 3) * hr * wr,
+              physics: const NeverScrollableScrollPhysics(),
+              children: List.generate(
+                12,
+                (index) {
+                  final double marginRight = 15 * wr;
+                  final double marginLeft = 15 * wr;
+                  final double marginBottom = 4 * hr;
+
+                  if (index == 9) {
+                    return Container(
+                      margin: widget.buttonMargin ??
+                          EdgeInsets.only(
+                            left: marginLeft,
+                            right: marginRight,
                           ),
-                        ),
-                      );
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                      child: Container(
-                        width: size,
-                        height: size,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: widget.filledIndicatorColor,
+                      child: MergeSemantics(
+                        child: Semantics(
+                          label: widget.deleteButtonLabel,
+                          child: ElevatedButton(
+                            style: widget.buttonStyle?.copyWith(
+                                  foregroundColor:
+                                      const MaterialStatePropertyAll(
+                                          Colors.red),
+                                ) ??
+                                ElevatedButton.styleFrom(
+                                  foregroundColor: widget.onPressColorAnimation,
+                                  backgroundColor: widget.deleteButtonColor,
+                                  side: widget.borderSide,
+                                  shape: const CircleBorder(),
+                                ),
+                            onPressed: () => _onRemove(),
+                            child: deleteIconImage,
+                          ),
                         ),
                       ),
                     );
-                  }),
-                ),
-              ),
-            ),
-            const Spacer(flex: 1),
-            Flexible(
-              flex: 26,
-              child: Container(
-                  child: _aspectRatio > 0
-                      ? GridView.count(
-                          shrinkWrap: true,
-                          crossAxisCount: 3,
-                          childAspectRatio: _aspectRatio + 0.18,
-                          physics: const NeverScrollableScrollPhysics(),
-                          children: List.generate(
-                            12,
-                            (index) {
-                              const double marginRight = 15;
-                              const double marginLeft = 15;
-                              const double marginBottom = 4;
-
-                              if (index == 9) {
-                                return Container(
-                                  margin: const EdgeInsets.only(
-                                      left: marginLeft, right: marginRight),
-                                  child: MergeSemantics(
-                                    child: Semantics(
-                                      label: widget.deleteButtonLabel,
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          primary: widget.deleteButtonColor,
-                                          side: widget.borderSide,
-                                          onPrimary:
-                                              widget.onPressColorAnimation,
-                                          shape: const CircleBorder(),
-                                        ),
-                                        onPressed: () => _onRemove(),
-                                        child: deleteIconImage,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              } else if (index == 10) {
-                                index = 0;
-                              } else if (index == 11) {
-                                return Container(
-                                  margin: const EdgeInsets.only(
-                                      left: marginLeft, right: marginRight),
-                                  child: MergeSemantics(
-                                    child: Semantics(
-                                      label: widget.enterButtonLabel,
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          primary: widget.deleteButtonColor,
-                                          side: widget.borderSide,
-                                          onPrimary:
-                                              widget.onPressColorAnimation,
-                                          shape: const CircleBorder(),
-                                        ),
-                                        onPressed: () {
-                                          widget.onEnter(pin, this);
-                                          clear();
-                                        },
-                                        child: enterIconImage,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                index++;
-                              }
-                              return Container(
-                                margin: const EdgeInsets.only(
-                                    left: marginLeft,
-                                    right: marginRight,
-                                    bottom: marginBottom),
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: widget.buttonColor,
-                                    onPrimary: widget.onPressColorAnimation,
-                                    side: widget.borderSide,
-                                    shape: const CircleBorder(),
-                                  ),
-                                  onPressed: () => _onPressed(index),
-                                  child: Text(
-                                    '$index',
-                                    style: widget.numbersStyle,
-                                  ),
-                                ),
-                              );
-                            },
+                  } else if (index == 10) {
+                    index = 0;
+                  } else if (index == 11) {
+                    return Container(
+                      margin: widget.buttonMargin ??
+                          EdgeInsets.only(
+                            left: marginLeft,
+                            right: marginRight,
                           ),
-                        )
-                      : null),
+                      child: MergeSemantics(
+                        child: Semantics(
+                          label: widget.enterButtonLabel,
+                          child: ElevatedButton(
+                            style: widget.buttonStyle?.copyWith(
+                                  backgroundColor: MaterialStatePropertyAll(
+                                    Theme.of(context).colorScheme.surface,
+                                  ),
+                                ) ??
+                                ElevatedButton.styleFrom(
+                                  foregroundColor: widget.onPressColorAnimation,
+                                  backgroundColor: widget.deleteButtonColor,
+                                  side: widget.borderSide,
+                                  shape: const CircleBorder(),
+                                ),
+                            onPressed: () {
+                              if (pin.isNotEmpty) {
+                                widget.onEnter(pin, this);
+                                clear();
+                              }
+                            },
+                            child: enterIconImage,
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    index++;
+                  }
+                  return Container(
+                    margin: widget.buttonMargin ??
+                        EdgeInsets.only(
+                          left: marginLeft,
+                          right: marginRight,
+                          bottom: marginBottom,
+                        ),
+                    child: ElevatedButton(
+                      style: widget.buttonStyle ??
+                          ElevatedButton.styleFrom(
+                            foregroundColor: widget.onPressColorAnimation,
+                            backgroundColor: widget.buttonColor,
+                            side: widget.borderSide,
+                            shape: const CircleBorder(),
+                          ),
+                      onPressed: () => _onPressed(index),
+                      child: Text(
+                        '$index',
+                        style: widget.numbersStyle,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
             widget.centerBottomWidget != null
                 ? Flexible(
-                    flex: 2,
+                    flex: 25,
                     child: Center(child: widget.centerBottomWidget!),
                   )
                 : const SizedBox(),
           ],
         ),
-      ),
-    );
+      );
+    });
   }
 
   void _onPressed(int num) async {
@@ -321,7 +389,9 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
         animate = true;
       });
     });
-    listController.jumpTo(listController.position.maxScrollExtent);
+    if (listController.hasClients) {
+      listController.jumpTo(listController.position.maxScrollExtent);
+    }
   }
 
   void _onRemove() {
