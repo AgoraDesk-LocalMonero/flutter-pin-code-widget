@@ -1,3 +1,6 @@
+## 0.1.1
+1. Update outdated properties for ElevatedButton
+
 ## 0.1.0
 
 * BREAKING CHANGES: plugin changed according to Android PIN code widget. Please look updated examples. 
