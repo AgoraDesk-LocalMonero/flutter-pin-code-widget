@@ -13,8 +13,7 @@ class PinCodeWidget extends StatefulWidget {
     this.onChangedPinLength,
     this.clearStream,
     this.centerBottomWidget,
-    this.numbersStyle = const TextStyle(
-        fontSize: 30.0, fontWeight: FontWeight.w600, color: Colors.grey),
+    this.numbersStyle = const TextStyle(fontSize: 30.0, fontWeight: FontWeight.w600, color: Colors.grey),
     this.borderSide = const BorderSide(width: 1, color: Colors.grey),
     this.buttonColor = Colors.black12,
     this.deleteButtonColor = Colors.black12,
@@ -116,8 +115,7 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
       });
 
   void calculateAspectRatio() {
-    final renderBox =
-        _gridViewKey.currentContext!.findRenderObject() as RenderBox;
+    final renderBox = _gridViewKey.currentContext!.findRenderObject() as RenderBox;
     final cellWidth = renderBox.size.width / 3;
     final cellHeight = renderBox.size.height / 4;
     if (cellWidth > 0 && cellHeight > 0) {
@@ -221,17 +219,15 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
 
                               if (index == 9) {
                                 return Container(
-                                  margin: const EdgeInsets.only(
-                                      left: marginLeft, right: marginRight),
+                                  margin: const EdgeInsets.only(left: marginLeft, right: marginRight),
                                   child: MergeSemantics(
                                     child: Semantics(
                                       label: widget.deleteButtonLabel,
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          primary: widget.deleteButtonColor,
+                                          backgroundColor: widget.deleteButtonColor,
                                           side: widget.borderSide,
-                                          onPrimary:
-                                              widget.onPressColorAnimation,
+                                          foregroundColor: widget.onPressColorAnimation,
                                           shape: const CircleBorder(),
                                         ),
                                         onPressed: () => _onRemove(),
@@ -244,17 +240,15 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                                 index = 0;
                               } else if (index == 11) {
                                 return Container(
-                                  margin: const EdgeInsets.only(
-                                      left: marginLeft, right: marginRight),
+                                  margin: const EdgeInsets.only(left: marginLeft, right: marginRight),
                                   child: MergeSemantics(
                                     child: Semantics(
                                       label: widget.enterButtonLabel,
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          primary: widget.deleteButtonColor,
+                                          backgroundColor: widget.deleteButtonColor,
                                           side: widget.borderSide,
-                                          onPrimary:
-                                              widget.onPressColorAnimation,
+                                          foregroundColor: widget.onPressColorAnimation,
                                           shape: const CircleBorder(),
                                         ),
                                         onPressed: () {
@@ -270,14 +264,12 @@ class PinCodeState<T extends PinCodeWidget> extends State<T> {
                                 index++;
                               }
                               return Container(
-                                margin: const EdgeInsets.only(
-                                    left: marginLeft,
-                                    right: marginRight,
-                                    bottom: marginBottom),
+                                margin:
+                                    const EdgeInsets.only(left: marginLeft, right: marginRight, bottom: marginBottom),
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                    primary: widget.buttonColor,
-                                    onPrimary: widget.onPressColorAnimation,
+                                    backgroundColor: widget.buttonColor,
+                                    foregroundColor: widget.onPressColorAnimation,
                                     side: widget.borderSide,
                                     shape: const CircleBorder(),
                                   ),

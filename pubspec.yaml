@@ -1,6 +1,6 @@
 name: flutter_pin_code_widget
 description: PIN Code wiget for creating and checking local pin code with flexible settings.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/AgoraDesk-LocalMonero/flutter-pin-code-widget
 
 environment:
